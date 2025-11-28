@@ -163,7 +163,8 @@
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../services/api";
 import { FaUser, FaEnvelope, FaLock, FaPhoneAlt, FaUserTie } from "react-icons/fa"; // Icons for fields
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Signup = () => {
@@ -189,7 +190,9 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/users", form);
+      // const res = await axios.post("http://localhost:5000/api/admin/users", form);
+
+        const res = await api.post("/api/admin/users", form);
 
       if (res.data.code === 200) {
         alert("Signup successful!");

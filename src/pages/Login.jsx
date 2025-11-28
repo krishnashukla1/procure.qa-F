@@ -295,7 +295,8 @@
 
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
+import api from "../services/api";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa"; // Optional: Add react-icons for icons
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -310,11 +311,17 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
+    // try {
+    //   const res = await axios.post("http://localhost:5000/api/admin/login", {
+    //     email,
+    //     password,
+    //   });
     try {
-      const res = await axios.post("http://localhost:5000/api/admin/login", {
-        email,
-        password,
-      });
+  const res = await api.post("/api/admin/login", {
+    email,
+    password,
+  });
+
 
       if (res.data.code === 200) {
         localStorage.setItem("token", res.data.data.token);
