@@ -520,7 +520,7 @@ const handleExport = () => {
                 <button
                   type="button"
                   onClick={() => document.querySelector('input[type="file"]')?.click()}
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  className="cursor-pointer text-sm text-blue-600 hover:text-blue-800 font-medium"
                 >
                   {imagePreview ? 'Change Image' : 'Choose Image'}
                 </button>
@@ -528,7 +528,7 @@ const handleExport = () => {
                   <button
                     type="button"
                     onClick={removeImage}
-                    className="text-sm text-red-600 hover:text-red-800 font-medium"
+                    className="cursor-pointer text-sm text-red-600 hover:text-red-800 font-medium"
                   >
                     Remove Image
                   </button>
@@ -540,13 +540,13 @@ const handleExport = () => {
               <button 
                 type="button"
                 onClick={handleModalClose}
-                className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="cursor-pointer flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Cancel
               </button>
               <button 
                 type="submit" 
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                className="cursor-pointer flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
               >
                 {editingId ? 'Update Category' : 'Create Category'}
               </button>
