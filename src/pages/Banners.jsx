@@ -997,183 +997,178 @@ const Banners = () => {
 
         {/* Create/Edit Modal */}
 
-        <Modal
-          title={
-            <div className="flex items-center gap-4 px-12 py-2">
-              {editingId ? (
-                <>
-                  <Edit className="w-7 h-7 text-blue-400 drop-shadow-glow" />
-                  <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-extrabold text-3xl tracking-wide drop-shadow">
-                    Edit Banner
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Plus className="w-7 h-7 text-green-400 drop-shadow-glow" />
-                  <span className="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent font-extrabold text-3xl tracking-wide drop-shadow">
-                    Create Banner
-                  </span>
-                </>
-              )}
-            </div>
-          }
-          open={showModal}
-          onClose={() => {
+    <Modal
+  title={
+    <div className="flex items-center gap-4 px-8 py-1.5">
+      {editingId ? (
+        <>
+          <Edit className="w-6 h-6 text-blue-400 drop-shadow-glow" />
+          <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-extrabold text-2xl tracking-wide drop-shadow">
+            Edit Banner
+          </span>
+        </>
+      ) : (
+        <>
+          <Plus className="w-6 h-6 text-green-400 drop-shadow-glow" />
+          <span className="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent font-extrabold text-2xl tracking-wide drop-shadow">
+            Create Banner
+          </span>
+        </>
+      )}
+    </div>
+  }
+  open={showModal}
+  onClose={() => {
+    setShowModal(false);
+    resetForm();
+  }}
+  className="!p-0"
+  size="xl"
+>
+  <div className="p-6 bg-gradient-to-br from-[#0f0f11] via-[#111113] to-[#0b0b0d] rounded-3xl shadow-2xl border border-white/10 backdrop-blur-2xl animate-in fade-in duration-300">
+    <form onSubmit={handleCreateOrUpdate} className="space-y-6">
+      {/* Description and Image Upload - Horizontal Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Description */}
+        <div className="space-y-2">
+          <label className="block text-sm font-bold text-white/90 tracking-wide flex items-center gap-2">
+            <Edit className="w-4 h-4 text-blue-400 drop-shadow-glow" />
+            Banner Description
+          </label>
+          <textarea
+            value={formData.description}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
+            }
+            className="w-full p-4 text-white/90 bg-white/10 border border-white/20 rounded-2xl
+              focus:outline-none focus:ring-2 focus:ring-blue-500/40
+              focus:border-blue-500/40 resize-none shadow-inner min-h-[100px]
+              placeholder-white/40 backdrop-blur-xl transition-all duration-300"
+            placeholder="Write an engaging banner message… (e.g., 'Mega Sale – 50% OFF!')"
+            rows="3"
+          />
+        </div>
+        
+        {/* Image Upload */}
+        <div className="space-y-3">
+          <label className="block text-sm font-bold text-white/90 tracking-wide flex items-center gap-2">
+            <Upload className="w-4 h-4 text-green-400 drop-shadow-glow" />
+            Banner Image{" "}
+            {!editingId && <span className="text-red-400">*</span>}
+          </label>
+          <div
+            className="border-2 border-dashed border-white/20 rounded-2xl p-4 text-center
+                  hover:border-blue-400/50 hover:bg-white/10
+                  transition-all duration-500 group shadow-xl bg-white/5 backdrop-blur-xl"
+          >
+            <input
+              id="bannerImage"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+              required={!editingId}
+            />
+            <label
+              htmlFor="bannerImage"
+              className="cursor-pointer flex flex-col items-center gap-3"
+            >
+              <div
+                className="w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl
+                      flex items-center justify-center text-white shadow-2xl
+                      group-hover:scale-110 group-hover:rotate-1
+                      transition-all duration-300"
+              >
+                <Upload className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-semibold text-white">
+                  Click to Upload
+                </p>
+                <p className="text-xs text-blue-300">
+                  JPG / PNG / GIF • Max 5MB • 1920×600
+                </p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Preview */}
+      {imagePreview && (
+        <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-4 shadow-2xl border border-white/10 fade-in">
+          <button
+            type="button"
+            onClick={() => {
+              setImagePreview(null);
+              setFormData((prev) => ({ ...prev, bannerImage: null }));
+            }}
+            className="absolute top-3 right-3 p-1.5 bg-red-500/20 rounded-lg hover:bg-red-500/30 transition-all shadow border border-red-300/30 backdrop-blur-md"
+          >
+            <X className="w-4 h-4 text-red-300" />
+          </button>
+          <img
+            src={imagePreview}
+            alt="Banner Preview"
+            className="w-full h-40 object-cover rounded-xl shadow-xl ring-1 ring-white/20"
+          />
+          <div className="absolute bottom-3 left-3 bg-black/40 rounded-lg px-3 py-1.5 backdrop-blur-sm border border-white/20">
+            <p className="text-xs font-semibold text-white flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3 text-yellow-400" />
+              Live Preview
+            </p>
+          </div>
+        </div>
+      )}
+      
+      {/* Actions */}
+      <div className="flex gap-4 pt-3">
+        {/* Cancel */}
+        <button
+          type="button"
+          onClick={() => {
             setShowModal(false);
             resetForm();
           }}
-          className="!p-0"
-          size="xl"
+          disabled={uploading}
+          className="cursor-pointer flex-1 px-6 py-3 border-2 border-white/20 text-white rounded-2xl
+            hover:border-white/40 hover:bg-white/10 transition-all duration-300
+            font-bold backdrop-blur-lg shadow-xl text-sm"
         >
-          <div className="p-8 bg-gradient-to-br from-[#0f0f11] via-[#111113] to-[#0b0b0d] rounded-3xl shadow-2xl border border-white/10 backdrop-blur-2xl animate-in fade-in duration-300">
-            <form onSubmit={handleCreateOrUpdate} className="space-y-10">
-              {/* Description */}
-              <div className="space-y-2">
-                <label className="block text-sm font-bold text-white/90 tracking-wide flex items-center gap-2">
-                  <Edit className="w-5 h-5 text-blue-400 drop-shadow-glow" />
-                  Banner Description
-                </label>
-
-                <textarea
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  className="w-full p-5 text-white/90 bg-white/10 border border-white/20 rounded-2xl 
-                     focus:outline-none focus:ring-2 focus:ring-blue-500/40 
-                     focus:border-blue-500/40 resize-none shadow-inner min-h-[130px]
-                     placeholder-white/40 backdrop-blur-xl transition-all duration-300"
-                  placeholder="Write an engaging banner message… (e.g., 'Mega Sale – 50% OFF!')"
-                  rows="3"
-                />
-              </div>
-
-              {/* Image Upload */}
-              <div className="space-y-3">
-                <label className="block text-sm font-bold text-white/90 tracking-wide flex items-center gap-2">
-                  <Upload className="w-5 h-5 text-green-400 drop-shadow-glow" />
-                  Banner Image{" "}
-                  {!editingId && <span className="text-red-400">*</span>}
-                </label>
-
-                <div
-                  className="border-2 border-dashed border-white/20 rounded-3xl p-8 text-center 
-                        hover:border-blue-400/50 hover:bg-white/10
-                        transition-all duration-500 group shadow-xl bg-white/5 backdrop-blur-xl"
-                >
-                  <input
-                    id="bannerImage"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    required={!editingId}
-                  />
-
-                  <label
-                    htmlFor="bannerImage"
-                    className="cursor-pointer flex flex-col items-center gap-5"
-                  >
-                    <div
-                      className="w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl 
-                            flex items-center justify-center text-white shadow-2xl 
-                            group-hover:scale-110 group-hover:rotate-1 
-                            transition-all duration-300"
-                    >
-                      <Upload className="w-9 h-9" />
-                    </div>
-
-                    <div className="space-y-1">
-                      <p className="text-lg font-semibold text-white">
-                        Click to Upload or Drag & Drop
-                      </p>
-                      <p className="text-sm text-blue-300">
-                        JPG / PNG / GIF • Max 5MB • Best Size:{" "}
-                        <span className="font-bold">1920×600</span>
-                      </p>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              {/* Preview */}
-              {imagePreview && (
-                <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/10 fade-in">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setImagePreview(null);
-                      setFormData((prev) => ({ ...prev, bannerImage: null }));
-                    }}
-                    className="absolute top-4 right-4 p-2 bg-red-500/20 rounded-xl hover:bg-red-500/30 transition-all shadow border border-red-300/30 backdrop-blur-md"
-                  >
-                    <X className="w-5 h-5 text-red-300" />
-                  </button>
-
-                  <img
-                    src={imagePreview}
-                    alt="Banner Preview"
-                    className="w-full h-56 object-cover rounded-xl shadow-xl ring-1 ring-white/20"
-                  />
-
-                  <div className="absolute bottom-4 left-4 bg-black/40 rounded-xl px-4 py-2 backdrop-blur-sm border border-white/20">
-                    <p className="text-sm font-semibold text-white flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-yellow-400" />
-                      Live Preview
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Actions */}
-              <div className="flex gap-6 pt-4">
-                {/* Cancel */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowModal(false);
-                    resetForm();
-                  }}
-                  disabled={uploading}
-                  className="cursor-pointer flex-1 px-8 py-4 border-2 border-white/20 text-white rounded-2xl 
-                     hover:border-white/40 hover:bg-white/10 transition-all duration-300 
-                     font-bold backdrop-blur-lg shadow-xl"
-                >
-                  Cancel
-                </button>
-
-                {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={uploading || (!formData.bannerImage && !editingId)}
-                  className="cursor-pointer flex-1 flex items-center justify-center gap-3 px-8 py-4 
-                     bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl 
-                     shadow-2xl hover:shadow-3xl disabled:opacity-50 disabled:cursor-not-allowed 
-                     transition-all duration-300 font-bold hover:scale-105 group"
-                >
-                  {uploading ? (
-                    <>
-                      <Loader2 className="w-6 h-6 animate-spin" />
-                      <span className="animate-pulse">
-                        {editingId
-                          ? "Updating Banner..."
-                          : "Creating Banner..."}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
-                      {editingId ? "Update Banner" : "Create Banner"}
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </Modal>
+          Cancel
+        </button>
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={uploading || (!formData.bannerImage && !editingId)}
+          className="cursor-pointer flex-1 flex items-center justify-center gap-2 px-6 py-3
+            bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl
+            shadow-2xl hover:shadow-3xl disabled:opacity-50 disabled:cursor-not-allowed
+            transition-all duration-300 font-bold hover:scale-105 group text-sm"
+        >
+          {uploading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="animate-pulse">
+                {editingId
+                  ? "Updating..."
+                  : "Creating..."}
+              </span>
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+              {editingId ? "Update Banner" : "Create Banner"}
+            </>
+          )}
+        </button>
+      </div>
+    </form>
+  </div>
+</Modal>
 
 
 
